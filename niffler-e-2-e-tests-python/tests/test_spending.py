@@ -11,6 +11,7 @@ def test_spending_title_exists():
 
 TEST_CATEGORY = 'SCHOOL'
 
+
 @pytest.fixture
 def main_page_late(category, spends, envs):
     browser.open(envs.frontend_url)
@@ -26,7 +27,7 @@ def main_page_late(category, spends, envs):
         category=TEST_CATEGORY,
         currency="RUB"
     )
-                 )
+)
 def test_spending_should_be_deleted_after_table_action(category, spends, envs):
     browser.element(".spendings-table tbody").should(have.text("QA.GURU Advanced 5 - обучение"))
     browser.element(".spendings-table tbody input[type='checkbox']").perform(command.js.scroll_into_view).click()

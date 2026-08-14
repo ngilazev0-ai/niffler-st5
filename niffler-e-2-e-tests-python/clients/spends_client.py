@@ -1,6 +1,11 @@
 from urllib.parse import urljoin
 
+import allure
 import requests
+import requests_toolbelt
+from allure_commons.types import AttachmentType
+from requests import Response
+from requests_toolbelt.utils.dump import dump_response
 
 from models.spend import Category, Spend, SpendAdd
 
@@ -17,7 +22,12 @@ class SpendsHttpClient:
                 'Authorization': f'Bearer {token}'
             }
         )
+        self.session.hooks["response"].append(self.attach_response)
 
+    @staticmethod
+    def attach_response(response: Response, *args, **kwargs):
+        attachment_name = response.request.method + " " + response.url
+        allure.attach(dump_response(response),attachment_name, attachment_type=AttachmentType.TEXT)
 
     def get_categories(self) -> list[Category]:
         response = self.session.get(urljoin(self.base_url, 'api/categories/all'))
