@@ -1,7 +1,7 @@
 import pytest
 from selene import browser, have, command
 from marks import Pages, TestData
-from models.spend import SpendAdd
+from models.spend import SpendAdd, CategoryAdd
 
 
 @Pages.main_page
@@ -24,14 +24,15 @@ def main_page_late(category, spends, envs):
         amount=108.51,
         description="QA.GURU Advanced 5 - обучение",
         spendDate="2026-08-09T17:53:15.741Z",
-        category=TEST_CATEGORY,
+        category=CategoryAdd(name=TEST_CATEGORY),
         currency="RUB"
     )
 )
 def test_spending_should_be_deleted_after_table_action(category, spends, envs):
-    browser.element(".spendings-table tbody").should(have.text("QA.GURU Advanced 5 - обучение"))
-    browser.element(".spendings-table tbody input[type='checkbox']").perform(command.js.scroll_into_view).click()
-    browser.element(".spendings__bulk-actions button").click()
-    browser.all(".spendings-table tbody tr").should(have.size(0))
+    browser.element("#spendings tbody").should(have.text("QA.GURU Advanced 5 - обучение"))
+    browser.element("#spendings tbody .MuiCheckbox-root").perform(command.js.scroll_into_view).click()
+    browser.element("#delete").click()
+    browser.element("//div[@role='dialog']//button[contains(text(), 'Delete')]").click()
 
-    browser.element(".spendings__content").should(have.text("No spendings provided yet!"))
+    browser.all("#spendings tr").should(have.size(0))
+    browser.element("#spendings").should(have.text("There are no spendings"))
