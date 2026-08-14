@@ -5,15 +5,21 @@ from sqlmodel import SQLModel, Field
 
 class Category(SQLModel, table=True):
     id: str = Field(default=None, primary_key=True)
-    category: str
+    name: str
     username: str
+    archived: bool
 
 
-class Spend(SQLModel, table=True):
+class CategoryAdd(BaseModel):
+    name: str
+    username: str | None = None
+    archived: bool | None = None
+
+class Spend(BaseModel):
     id: str = Field(default=None, primary_key=True)
     amount: float
     description: str
-    category: str
+    category: Category
     spendDate: datetime
     currency: str
 
@@ -22,6 +28,6 @@ class Spend(SQLModel, table=True):
 class SpendAdd(BaseModel):
     amount: float
     description: str
-    category: str
+    category: CategoryAdd
     spendDate: str
     currency: str
