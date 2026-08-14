@@ -41,3 +41,6 @@ out/
 
 ### gRPC generated files ###
 /niffler-grpc-common/src/generated/**
+
+### Local scripts ###
+install.cmd
